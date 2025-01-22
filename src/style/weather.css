@@ -1,0 +1,15 @@
+.degree{
+    position:relative;
+    width: fit-content;
+    font-size:40px;
+}
+.o{
+    position: absolute;
+    top:-12px;
+    right: -10px;
+    font-size: 20px;
+}
+.hour{
+    display: flex;
+    gap: 20px;
+}
