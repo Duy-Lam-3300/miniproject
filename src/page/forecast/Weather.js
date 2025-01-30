@@ -9,17 +9,17 @@ import ScreenPhone from "../../component/forecast/ScreenPhone";
 
 export default function Weather() {
     const [weatherData, setWeatherData] = useState();
-    const [location, setLocation] = useState("VietNam");
+    const [location, setLocation] = useState("Ho Chi Minh");
     const [loading, setLoading] = useState(false);
     const [inputs, setInputs] = useState();
     const { getForecast } = weatherApi();
     const dateTimeNow = new Date();
 
     useEffect(() => {
-        const fetchBeginData = setTimeout(async () => {
+        const fetchBeginData = async () => {
             try {
                 setLoading(true);
-                const resultData = await getForecast(location);
+                const resultData = await getForecast(location, null, "yes", null, "vi");
                 console.log(resultData);
                 setWeatherData(resultData);
             } catch (e) {
@@ -28,8 +28,8 @@ export default function Weather() {
             } finally {
                 setLoading(false);
             }
-        }, 1000);
-        return () => clearTimeout(fetchBeginData);
+        }
+        fetchBeginData();
     }, [location])
 
     const handleGetForecast = async () => {
@@ -112,7 +112,7 @@ export default function Weather() {
                 </div>
             </div> */}
             <div className="h-full w-fit p-10">
-                <ScreenPhone current={weatherData?.data?.current} forecast={weatherData?.data?.forecast?.forecastday} />
+                <ScreenPhone weatherData={weatherData?.data} location={location} setLocation={setLocation} />
             </div>
         </div>
     )
