@@ -28,39 +28,37 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation })
     }]
 
     const windDangerColor = (speed) => {
-        if (speed <= 10) return "text-green-500";  // Calm
-        if (speed <= 30) return "text-yellow-500"; // Moderate Breeze
-        if (speed <= 50) return "text-orange-500"; // Strong Breeze
-        if (speed <= 70) return "text-red-500";    // High Wind
-        return "text-purple-500";                  // Extreme Winds
+        if (speed <= 10) return "text-green-500";
+        if (speed <= 30) return "text-yellow-500";
+        if (speed <= 50) return "text-orange-500";
+        if (speed <= 70) return "text-red-500";
+        return "text-purple-500";
     }
     const humidityDangerColor = (percent) => {
-        if (percent <= 30) return "text-blue-500";  // Calm
-        if (percent <= 60) return "text-green-500"; // Moderate Breeze
-        if (percent <= 80) return "text-yello-500"; // Strong Breeze
-        return "text-red-500";                  // Extreme Winds
+        if (percent <= 30) return "text-blue-500";
+        if (percent <= 60) return "text-green-500";
+        if (percent <= 80) return "text-yello-500";
+        return "text-red-500";
     }
 
     const airQualityDangerColor = (aqi) => {
-        if (aqi <= 50) return "text-green-500";  // Good
-        if (aqi <= 100) return "text-yellow-500"; // Moderate
-        if (aqi <= 150) return "text-orange-500"; // Unhealthy for Sensitive Groups
-        if (aqi <= 200) return "text-red-500";   // Unhealthy
-        if (aqi <= 300) return "text-purple-500"; // Very Unhealthy
-        return "text-brown-500";                 // Hazardous
+        if (aqi <= 50) return "text-green-500";
+        if (aqi <= 100) return "text-yellow-500";
+        if (aqi <= 150) return "text-orange-500";
+        if (aqi <= 200) return "text-red-500";
+        if (aqi <= 300) return "text-purple-500";
+        return "text-brown-500";
     };
-    const dateTimeNow = Math.floor(new Date().getTime() / 1000);
-    console.log(dateTimeNow);
-    console.log(forecast);
-    console.log("current", current);
+
 
 
 
     return (<div className=" w-[550px] h-full rounded-3xl border-2 border-black p-10 relative overflow-y-scroll" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
         <div className="flex justify-between items-center relative w-full">
-            <div className="border-2 rounded-full border-gray-300  p-[0.69rem] shadow-xl w-[3rem] h-[3rem] flex items-center text-gray-400 hover:border-gray-500 hover:text-black cursor-pointer hover:scale-105">
-                {/* <img className="w-[2rem] h-[2rem] " src="https://cdn-icons-png.flaticon.com/512/5392/5392911.png " alt="" title="" /> */}
-                <FontAwesomeIcon icon={faBars} className="w-fit h-fit " onClick={(e) => setShowPopup((prev) => !prev)} />
+            <div className={`border-2 rounded-full ${showPopup ? ("border-black text-black") : ("border-gray-300 text-gray-400")}  p-[0.69rem] shadow-xl w-[3rem] h-[3rem] flex items-center  hover:border-gray-500 hover:text-black cursor-pointer hover:scale-105`}
+                onClick={(e) => setShowPopup((prev) => !prev)}
+            >
+                <FontAwesomeIcon icon={faBars} className="w-fit h-fit " />
             </div>
             <div className="flex flex-col items-center">
 
@@ -96,7 +94,6 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation })
                     </div>
                 </div>
                 <img className="w-[10rem] h-[10rem] absolute bottom-0 translate-y-[50%] drop-shadow-2xl"
-                    // style={{ WebkitFilter: " drop-shadow(5px 5px 5px #222)", filter: "drop-shadow(5px 5px 5px #222);" }} 
                     src={replaceIconFromAPI?.find(item => item.tartget === current?.condition?.icon)?.replace || current?.condition?.icon} alt="" title="" />
             </div>
         </div>
@@ -151,15 +148,12 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation })
             <p className="font-semibold text-xl">Today</p>
             <div className="flex gap-4 overflow-x-scroll pt-4 pb-10">
                 {forecast[0]?.hour?.map(item => {
-                    if (item?.time_epoch < current?.last_updated_epoch - 3600) return;
+                    if (item?.time_epoch < current?.last_updated_epoch) return;
                     return (
                         <div className="relative border-2 shadow-lg rounded-xl px-10 py-4 flex flex-col items-center text-[1.2rem]  font-medium gap-2">
                             <p className=" font-medium">{format(item?.time, "HH:mm")}</p>
                             <img className="w-[3rem] h-[2.5rem] drop-shadow-lg"
-                                // style={{ WebkitFilter: " drop-shadow(5px 5px 5px #222)", filter: "drop-shadow(5px 5px 5px #222);" }} 
-
                                 src={replaceIconFromAPI?.find(target => target.tartget === item?.condition?.icon)?.replace || item?.condition?.icon} alt="" title=""
-                            // src={item?.condition?.icon} alt="" title="" 
                             />
                             <div className="relative w-fit text-[1.5rem]">
                                 <p>{item?.temp_c}</p>
