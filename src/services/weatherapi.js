@@ -34,9 +34,9 @@ export default function weatherApi() {
         }
         return null
     }
-    const getTimeZone = async (location, days = 1, aqi = "no", alerts = "no") => {
+    const searchingAndAutoComplete = async (location) => {
         try {
-            const result = await axios.get("http://api.weatherapi.com/v1/forecast.json?key=" + keyData + "&q=" + location + "&days=" + days + "&aqi=" + aqi + "&alerts=" + alerts + "&");
+            const result = await axios.get("http://api.weatherapi.com/v1/search.json?key=" + keyData + "&q=" + location);
             return result
         } catch (e) {
             console.log(e);
@@ -49,5 +49,5 @@ export default function weatherApi() {
 
 
 
-    return { getForecast,getForecastFuture };
+    return { getForecast, getForecastFuture,searchingAndAutoComplete };
 }

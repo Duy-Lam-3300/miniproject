@@ -13,8 +13,8 @@ export default function Weather() {
     const [tomorowData, setTomorowData] = useState();
     const [location, setLocation] = useState("Ho Chi Minh");
     const [loading, setLoading] = useState(false);
-    const [inputs, setInputs] = useState();
-    const { getForecast, getForecastFuture } = weatherApi();
+    const [locations, setLocations] = useState();
+    const { getForecast, getForecastFuture, searchingAndAutoComplete } = weatherApi();
     const dateTimeNow = new Date();
 
     useEffect(() => {
@@ -35,11 +35,25 @@ export default function Weather() {
         }
         fetchBeginData();
     }, [location])
-    console.log("here", weatherData?.data);
+    const handleSearching = async (dataQ) => {
+
+        try {
+            setLoading(true)
+            const result = await searchingAndAutoComplete(dataQ);
+            if (result?.status === 200) {
+                setLocations(result?.data);
+            }
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <div className="w-[100vw] h-[100vh] flex justify-between p-10">
             <div className="h-full w-fit">
-                <ScreenPhone weatherData={weatherData?.data} location={location} setLocation={setLocation} />
+                <ScreenPhone weatherData={weatherData?.data} location={location} setLocation={setLocation} handleSearching={handleSearching} locations={locations} setLocations={setLocations} />
             </div>
             <div className="">
                 <FutureForecastBox data={weatherData?.data?.forecast?.forecastday[1]} />

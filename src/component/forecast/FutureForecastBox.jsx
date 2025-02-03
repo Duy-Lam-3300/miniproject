@@ -3,8 +3,9 @@ import { format } from "date-fns";
 
 
 export default function FutureForecastBox({ data }) {
-    const dateDate = new Date(data?.date) || new Date();
+    const dateDate = data?.date?new Date( data?.date): new Date();
     console.log("data", data);
+    console.log("dateDate", dateDate);
 
     return (
         <div className="flex flex-col items-center border-2 pt-4 pb-8 px-10 rounded-2xl ">
@@ -36,7 +37,7 @@ export default function FutureForecastBox({ data }) {
             </div>
             <div className="mt-3 flex gap-1 text-xl ">
                 <p>Chất lượng không khí:</p>
-                <p> {" " + (data?.day?.air_quality?.pm10).toFixed(2)}</p>
+                <p> {" " + (data?.day?.air_quality?.pm10)?.toFixed(2)}</p>
             </div>
             <div className="mt-3 flex gap-1 text-xl ">
                 <p>Độ ẩm:</p>
