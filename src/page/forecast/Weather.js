@@ -6,6 +6,7 @@ import "../../style/weather.css";
 import { addDays, format } from "date-fns";
 import ScreenPhone from "../../component/forecast/ScreenPhone";
 import FutureForecastBox from "../../component/forecast/FutureForecastBox";
+import MusicBox from "../../component/forecast/MusicBox";
 
 
 export default function Weather() {
@@ -55,15 +56,23 @@ export default function Weather() {
             <div className="h-full w-fit">
                 <ScreenPhone weatherData={weatherData?.data} location={location} setLocation={setLocation} handleSearching={handleSearching} locations={locations} setLocations={setLocations} />
             </div>
-            <div className="">
-                <FutureForecastBox data={weatherData?.data?.forecast?.forecastday[1]} />
+            <div className="flex flex-col gap-20">
+                <div className="flex w-fit gap-20">
+                    <div className="">
+                        <FutureForecastBox data={weatherData?.data?.forecast?.forecastday[1]} />
+                    </div>
+                    <div className="">
+                        <FutureForecastBox data={weatherData?.data?.forecast?.forecastday[2]} />
+                    </div>
+                    <div className="">
+                        <FutureForecastBox data={weatherData?.data?.forecast?.forecastday[3]} />
+                    </div>
+                </div>
+                <div className="row-span-2 col-span-3">
+                    <MusicBox />
+                </div>
             </div>
-            <div className="">
-                <FutureForecastBox data={weatherData?.data?.forecast?.forecastday[2]} />
-            </div>
-            <div className="">
-                <FutureForecastBox data={weatherData?.data?.forecast?.forecastday[3]} />
-            </div>
+
         </div>
     )
 }

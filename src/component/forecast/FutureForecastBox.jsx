@@ -3,7 +3,7 @@ import { format } from "date-fns";
 
 
 export default function FutureForecastBox({ data }) {
-    const dateDate = data?.date?new Date( data?.date): new Date();
+    const dateDate = data?.date ? new Date(data?.date) : new Date();
     console.log("data", data);
     console.log("dateDate", dateDate);
 
