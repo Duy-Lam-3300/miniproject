@@ -1,7 +1,7 @@
-import { faBars, faDroplet, faHeartCircleCheck, faHeartCircleExclamation, faHeartCircleMinus, faHeartCircleXmark, faHouse, faList, faLocationDot, faMagnifyingGlass, faSliders, faWind, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { fa1, faBars, faDroplet, faHeartCircleCheck, faHeartCircleExclamation, faHeartCircleMinus, faHeartCircleXmark, faHouse, faList, faLocationDot, faMagnifyingGlass, faSliders, faWind, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
@@ -14,6 +14,8 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
     const forecast = weatherData?.forecast?.forecastday || [];
     const places = weatherData?.location || {};
     const nav = useNavigate();
+    const popupBox = useRef();
+    const iconForPopup = useRef();
 
     const replaceIconFromAPI = [{
         description: "Clear night moon",
@@ -52,6 +54,19 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
         return "text-brown-500";
     };
 
+    useEffect(() => {
+        const handleClickOutSide = (event) => {
+            if (popupBox.current && !popupBox.current.contains(event.target) && !iconForPopup.current.contains(event.target) && iconForPopup.current) {
+                setInputLocation("");
+                setShowPopup((prev) => !prev);
+                setLocations();
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutSide);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutSide);
+        }
+    }, [])
 
 
 
@@ -59,19 +74,20 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
         <div className="flex justify-between items-center relative w-full">
             <div className={` border-2 rounded-full ${showPopup ? ("border-black text-black") : ("border-gray-300 text-gray-400")}  p-[0.69rem] shadow-xl w-[3rem] h-[3rem] flex items-center  hover:border-gray-500 hover:text-black cursor-pointer hover:scale-105`}
                 onClick={(e) => setShowPopup((prev) => !prev)}
+                ref={iconForPopup}
             >
                 <FontAwesomeIcon icon={faBars} className="w-fit h-fit " />
             </div>
             <div className="flex flex-col items-center">
 
-                <p className="text-2xl font-semibold select-none">{format(new Date((places?.localtime_epoch || 1738233532) * 1000), "eeee, MMMM dd,yyyy")}</p>
+                <p className="text-2xl font-semibold select-none">{format(new Date((places?.localtime_epoch || 1738233532) * 1000), "eeee, MMMM dd, yyyy")}</p>
                 <p className="text-lg font-semibold mt-4 select-none">{places?.name + " ," + places?.country}</p>
             </div>
             <div className="border-2 rounded-full border-gray-300  p-[0.69rem] shadow-xl w-[3rem] h-[3rem] flex items-center text-gray-400 hover:border-gray-500 hover:text-black cursor-pointer hover:scale-105">
                 <FontAwesomeIcon icon={faSliders} className="w-fit h-fit " />
             </div>
             {showPopup && (
-                <div className="border-2 rounded-xl bg-white absolute w-full h-[30rem] top-[5rem] z-50 p-8 shadow-lg flex flex-col justify-between">
+                <div className="border-2 rounded-xl bg-white absolute w-full h-[30rem] top-[5rem] z-50 p-8 shadow-lg flex flex-col justify-between" ref={popupBox}>
                     <div className="relative w-full focus-within:text-black text-gray-300">
                         <input className="border-2 pl-8 pr-20  w-full py-2 rounded-3xl" value={inputLocation} placeholder={location} onChange={(e) => setInputLocation(e.target.value)} />
                         <FontAwesomeIcon icon={faLocationDot} className="absolute left-[0.5rem] w-[1.5rem] h-[1.5rem] top-[50%]  translate-y-[-50%] pointer-events-none" />
@@ -80,7 +96,7 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
                     </div>
                     <div className="h-full p-4">
                         {locations.map(item => (
-                            <div className="flex font-semibold cursor-pointer my-2 text-lg" onClick={() => { setLocation(item?.name); setLocations([]) }}>
+                            <div className="flex font-semibold text-gray-400 hover:text-black cursor-pointer my-2 text-lg" onClick={() => { setLocation(item?.name); setLocations([]) }}>
                                 <p>{item?.name + ", " + item?.country}</p>
                             </div>
                         ))}
@@ -134,7 +150,7 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
                     )}
                     <p className="text-xl font-semibold">Chất lượng không khí</p>
                 </div>
-                <div className={`flex items-end gap-1 ${airQualityDangerColor(current?.air_quality?.pm10)}`}>
+                <div className={`flex items-end gap-1  translate-x-[1rem] ${airQualityDangerColor(current?.air_quality?.pm10)}`}>
                     <p className="text-2xl font-semibold">
                         {current?.air_quality?.pm10}
                     </p>
@@ -146,7 +162,7 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
                     <FontAwesomeIcon icon={faDroplet} className={`text-xl`} />
                     <p className="text-xl font-semibold">Độ ẩm</p>
                 </div>
-                <div className={`flex items-end gap-1  ${humidityDangerColor(current?.humidity)}`}>
+                <div className={`flex items-end gap-1  translate-x-[1rem] ${humidityDangerColor(current?.humidity)}`}>
                     <p className="text-2xl font-semibold">
                         {current?.humidity}
                     </p>
