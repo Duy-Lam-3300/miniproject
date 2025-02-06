@@ -41,7 +41,7 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
     const humidityDangerColor = (percent) => {
         if (percent <= 30) return "text-blue-500";
         if (percent <= 60) return "text-green-500";
-        if (percent <= 80) return "text-yello-500";
+        if (percent <= 80) return "text-yellow-500";
         return "text-red-500";
     }
 
@@ -70,9 +70,9 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
 
 
 
-    return (<div className=" w-[550px] h-full rounded-3xl border-2 border-black p-10 relative overflow-y-scroll select-none" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+    return (<div className="bgcomponent w-[550px] h-full rounded-3xl text-black  p-10 relative overflow-y-scroll select-none " style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
         <div className="flex justify-between items-center relative w-full">
-            <div className={` border-2 rounded-full ${showPopup ? ("border-black text-black") : ("border-gray-300 text-gray-400")}  p-[0.69rem] shadow-xl w-[3rem] h-[3rem] flex items-center  hover:border-gray-500 hover:text-black cursor-pointer hover:scale-105`}
+            <div className={`  rounded-full bg-[rgb(0,0,0,0.1)] hover:text-white ${showPopup ? (" text-white") : (" text-gray-200")}  p-[0.69rem] shadow-xl w-[3rem] h-[3rem] flex items-center   cursor-pointer hover:scale-105`}
                 onClick={(e) => setShowPopup((prev) => !prev)}
                 ref={iconForPopup}
             >
@@ -83,8 +83,9 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
                 <p className="text-2xl font-semibold select-none">{format(new Date((places?.localtime_epoch || 1738233532) * 1000), "eeee, MMMM dd, yyyy")}</p>
                 <p className="text-lg font-semibold mt-4 select-none">{places?.name + " ," + places?.country}</p>
             </div>
-            <div className="border-2 rounded-full border-gray-300  p-[0.69rem] shadow-xl w-[3rem] h-[3rem] flex items-center text-gray-400 hover:border-gray-500 hover:text-black cursor-pointer hover:scale-105">
-                <FontAwesomeIcon icon={faSliders} className="w-fit h-fit " />
+            <div className={`  rounded-full bg-[rgb(0,0,0,0.1)] hover:text-white ${showPopup ? (" text-white") : (" text-gray-200")}  p-[0.69rem] shadow-xl w-[3rem] h-[3rem] flex items-center   cursor-pointer hover:scale-105`}
+
+            >                <FontAwesomeIcon icon={faSliders} className="w-fit h-fit " />
             </div>
             {showPopup && (
                 <div className="border-2 rounded-xl bg-white absolute w-full h-[30rem] top-[5rem] z-50 p-8 shadow-lg flex flex-col justify-between" ref={popupBox}>
@@ -107,7 +108,7 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
             )}
         </div>
         <div className="w-full flex justify-center">
-            <div className="text-[6rem] w-fit flex flex-col items-center relative border-2 rounded-xl py-4 px-[4.5rem] pb-[5rem] mb-[6.5rem]  shadow-xl mt-8">
+            <div className="text-[6rem] w-fit flex flex-col items-center relative bg-[rgb(225,225,225,0.1)] rounded-xl py-4 px-[4.5rem] pb-[5rem] mb-[6.5rem]  shadow-xl mt-8">
                 <div className="font-semibold text-[2rem] select-none">{current?.condition?.text}</div>
                 <div className="relative w-fit h-[8rem] select-none">
                     <p>{current?.temp_c}</p>
@@ -125,19 +126,19 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
             </div>
         </div>
         <div className="w-full justify-between flex items-center select-none">
-            <div className="flex flex-col items-center gap-2">
+            <div className={`flex flex-col items-center gap-2 ${windDangerColor(current?.wind_kph)}`}>
                 <div className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faWind} className={`text-xl`} />
                     <p className="text-xl font-semibold">Gió</p>
                 </div>
-                <div className={`flex items-end gap-1  ${windDangerColor(current?.wind_kph)}`}>
+                <div className="flex items-end gap-1  ">
                     <p className="text-2xl font-semibold">
                         {current?.wind_kph}
                     </p>
                     <p className="font-semibold">km/h</p>
                 </div>
             </div>
-            <div className="flex flex-col items-center gap-2">
+            <div className={`flex flex-col items-center gap-2  ${airQualityDangerColor(current?.air_quality?.pm10)}`}>
                 <div className="flex items-center gap-2">
                     {current?.air_quality?.pm10 <= 50 ? (
                         <FontAwesomeIcon icon={faHeartCircleCheck} className="text-xl" />
@@ -150,19 +151,19 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
                     )}
                     <p className="text-xl font-semibold">Chất lượng không khí</p>
                 </div>
-                <div className={`flex items-end gap-1  translate-x-[1rem] ${airQualityDangerColor(current?.air_quality?.pm10)}`}>
+                <div className="flex items-end gap-1  translate-x-[1rem]">
                     <p className="text-2xl font-semibold">
                         {current?.air_quality?.pm10}
                     </p>
 
                 </div>
             </div>
-            <div className="flex flex-col items-center gap-2 select-none">
+            <div className={`flex flex-col items-center gap-2 select-none ${humidityDangerColor(current?.humidity)}`}>
                 <div className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faDroplet} className={`text-xl`} />
                     <p className="text-xl font-semibold">Độ ẩm</p>
                 </div>
-                <div className={`flex items-end gap-1  translate-x-[1rem] ${humidityDangerColor(current?.humidity)}`}>
+                <div className="flex items-end gap-1  translate-x-[1rem]">
                     <p className="text-2xl font-semibold">
                         {current?.humidity}
                     </p>
@@ -173,11 +174,11 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
 
         <div className="mt-8 select-none">
             <p className="font-semibold text-xl">Today</p>
-            <div className="flex gap-4 overflow-x-scroll pt-4 pb-10">
+            <div className="flex gap-4 overflow-x-scroll pt-4 pb-10 scrollBehaviour">
                 {forecast[0]?.hour?.map(item => {
                     if (item?.time_epoch < current?.last_updated_epoch) return;
                     return (
-                        <div className="relative border-2 shadow-lg rounded-xl px-10 py-4 flex flex-col items-center text-[1.2rem]  font-medium gap-2">
+                        <div className="relative bg-[rgb(225,225,225,0.1)] shadow-lg rounded-xl px-10 py-4 flex flex-col items-center text-[1.2rem]  font-medium gap-2">
                             <p className=" font-medium">{format(item?.time, "HH:mm")}</p>
                             <img className="w-[3rem] h-[2.5rem] drop-shadow-lg"
                                 src={replaceIconFromAPI?.find(target => target.tartget === item?.condition?.icon)?.replace || item?.condition?.icon} alt="" title=""

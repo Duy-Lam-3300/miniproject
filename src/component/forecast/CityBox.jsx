@@ -24,7 +24,7 @@ export default function CityBox({ weatherData = {}, location, setLocation, handl
     const humidityDangerColor = (percent) => {
         if (percent <= 30) return "text-blue-500";
         if (percent <= 60) return "text-green-500";
-        if (percent <= 80) return "text-yello-500";
+        if (percent <= 80) return "text-yellow-500";
         return "text-red-500";
     }
 
@@ -57,7 +57,7 @@ export default function CityBox({ weatherData = {}, location, setLocation, handl
         }
     }, [])
 
-    return (<div className=" w-full h-full rounded-3xl border-2 border-black p-7 pb-0 relative select-none" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+    return (<div className=" w-full h-full rounded-3xl bgcomponent text-white p-7 pb-0 relative select-none" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
         <div className={`absolute top-0 right-1 rounded-full ${showPopup ? (" text-black") : (" text-gray-400")}  p-[0.69rem] w-[3rem] h-[3rem] flex items-center  hover:border-gray-500 hover:text-black cursor-pointer hover:scale-105`}
             onClick={(e) => setShowPopup((prev) => !prev)}
             ref={iconForPopup}
@@ -105,11 +105,11 @@ export default function CityBox({ weatherData = {}, location, setLocation, handl
                 </div>
             </div>
             <div className="flex flex-col items-start gap-2">
-                <div className="flex flex-col items-center gap-2 select-none">
+                <div className={`flex flex-col items-center gap-2 select-none  ${windDangerColor(current?.wind_kph)}`}>
                     <div className="flex items-center gap-2 justify-between">
                         <FontAwesomeIcon icon={faWind} className={`text-xl w-[1.5rem] h-[1.5rem]`} />
 
-                        <div className={`flex items-end gap-1  ${windDangerColor(current?.wind_kph)}`}>
+                        <div className={`flex items-end gap-1  `}>
                             <p className="text-2xl font-semibold">
                                 {current?.wind_kph}
                             </p>
@@ -117,7 +117,7 @@ export default function CityBox({ weatherData = {}, location, setLocation, handl
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col items-center gap-2 select-none">
+                <div className={`flex flex-col items-center gap-2 select-none  ${airQualityDangerColor(current?.air_quality?.pm10)}`}>
                     <div className="flex items-center gap-2 justify-between">
                         {current?.air_quality?.pm10 <= 50 ? (
                             <FontAwesomeIcon icon={faHeartCircleCheck} className="text-xl w-[1.5rem] h-[1.5rem]" />
@@ -129,7 +129,7 @@ export default function CityBox({ weatherData = {}, location, setLocation, handl
                             <FontAwesomeIcon icon={faHeartCircleXmark} className="text-xl w-[1.5rem] h-[1.5rem]" />
                         )}
 
-                        <div className={`flex items-end gap-1 ${airQualityDangerColor(current?.air_quality?.pm10)}`}>
+                        <div className={`flex items-end gap-1`}>
                             <p className="text-2xl font-semibold">
                                 {current?.air_quality?.pm10}
                             </p>
@@ -138,10 +138,10 @@ export default function CityBox({ weatherData = {}, location, setLocation, handl
                     </div>
 
                 </div>
-                <div className="flex flex-col items-center gap-2 select-none">
+                <div className={`flex flex-col items-center gap-2 select-none ${humidityDangerColor(current?.humidity)}`}>
                     <div className="flex items-center gap-2 justify-between">
                         <FontAwesomeIcon icon={faDroplet} className={`text-xl w-[1.5rem] h-[1.5rem]`} />
-                        <div className={`flex items-end gap-1  ${humidityDangerColor(current?.humidity)}`}>
+                        <div className={`flex items-end gap-1  `}>
                             <p className="text-2xl font-semibold">
                                 {current?.humidity}
                             </p>
