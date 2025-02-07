@@ -58,7 +58,7 @@ export default function CityBox({ weatherData = {}, location, setLocation, handl
     }, [])
 
     return (<div className=" w-full h-full rounded-3xl bgcomponent text-white p-7 pb-0 relative select-none" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-        <div className={`absolute top-0 right-1 rounded-full ${showPopup ? (" text-black") : (" text-gray-400")}  p-[0.69rem] w-[3rem] h-[3rem] flex items-center  hover:border-gray-500 hover:text-black cursor-pointer hover:scale-105`}
+        <div className={`absolute top-0 right-1 rounded-full ${showPopup ? (" text-white") : (" text-gray-400")}  p-[0.69rem] w-[3rem] h-[3rem] flex items-center  hover:border-gray-500 hover:text-white cursor-pointer hover:scale-105`}
             onClick={(e) => setShowPopup((prev) => !prev)}
             ref={iconForPopup}
         >

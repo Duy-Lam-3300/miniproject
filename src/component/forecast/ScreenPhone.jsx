@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function ScreenPhone({ weatherData = {}, location, setLocation, handleSearching, locations = [], setLocations }) {
     const [showPopup, setShowPopup] = useState(false);
+    const [showSettingPopup, setShowSettingPopup] = useState(false);
     const [inputLocation, setInputLocation] = useState(location);
     const current = weatherData?.current || {};
     const forecast = weatherData?.forecast?.forecastday || [];
@@ -16,6 +17,8 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
     const nav = useNavigate();
     const popupBox = useRef();
     const iconForPopup = useRef();
+    const settingPopupBox = useRef();
+    const iconForSettingPopup = useRef();
 
     const replaceIconFromAPI = [{
         description: "Clear night moon",
@@ -61,6 +64,9 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
                 setShowPopup((prev) => !prev);
                 setLocations();
             }
+            if (settingPopupBox.current && !settingPopupBox.current.contains(event.target) && !iconForSettingPopup.current.contains(event.target) && iconForSettingPopup.current) {
+                setShowSettingPopup((prev) => !prev);
+            }
         }
         document.addEventListener("mousedown", handleClickOutSide);
         return () => {
@@ -84,11 +90,32 @@ export default function ScreenPhone({ weatherData = {}, location, setLocation, h
                 <p className="text-lg font-semibold mt-4 select-none">{places?.name + " ," + places?.country}</p>
             </div>
             <div className={`  rounded-full bg-[rgb(0,0,0,0.1)] hover:text-white ${showPopup ? (" text-white") : (" text-gray-200")}  p-[0.69rem] shadow-xl w-[3rem] h-[3rem] flex items-center   cursor-pointer hover:scale-105`}
-
-            >                <FontAwesomeIcon icon={faSliders} className="w-fit h-fit " />
+                onClick={(e) => setShowSettingPopup((prev) => !prev)}
+                ref={iconForSettingPopup}
+            >
+                <FontAwesomeIcon icon={faSliders} className="w-fit h-fit " />
             </div>
             {showPopup && (
                 <div className="border-2 rounded-xl bg-white absolute w-full h-[30rem] top-[5rem] z-50 p-8 shadow-lg flex flex-col justify-between" ref={popupBox}>
+                    <div className="relative w-full focus-within:text-black text-gray-300">
+                        <input className="border-2 pl-8 pr-20  w-full py-2 rounded-3xl" value={inputLocation} placeholder={location} onChange={(e) => setInputLocation(e.target.value)} />
+                        <FontAwesomeIcon icon={faLocationDot} className="absolute left-[0.5rem] w-[1.5rem] h-[1.5rem] top-[50%]  translate-y-[-50%] pointer-events-none" />
+                        <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute right-[0.8rem] w-[1.5rem] h-[1.5rem] top-[50%]  translate-y-[-50%] cursor-pointer text-gray-400 hover:text-black" onClick={() => handleSearching(inputLocation)} />
+                        <FontAwesomeIcon icon={faXmark} className="absolute right-[3rem] w-[1rem] h-[1rem] top-[50%]  translate-y-[-50%] cursor-pointer text-gray-400 hover:text-black" onClick={(e) => setInputLocation("")} />
+                    </div>
+                    <div className="h-full p-4">
+                        {locations.map(item => (
+                            <div className="flex font-semibold text-gray-400 hover:text-black cursor-pointer my-2 text-lg" onClick={() => { setLocation(item?.name); setLocations([]) }}>
+                                <p>{item?.name + ", " + item?.country}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <button className="w-full text-center bg-red-500 text-white p-2 text-xl font-semibold rounded-full hover:bg-red-400 hover:scale-105" onClick={() => nav("/")}>Exit
+                    </button>
+                </div>
+            )}
+            {showSettingPopup && (
+                <div className="border-2 rounded-xl bg-white absolute w-full h-[30rem] top-[5rem] z-50 p-8 shadow-lg flex flex-col justify-between" ref={settingPopupBox}>
                     <div className="relative w-full focus-within:text-black text-gray-300">
                         <input className="border-2 pl-8 pr-20  w-full py-2 rounded-3xl" value={inputLocation} placeholder={location} onChange={(e) => setInputLocation(e.target.value)} />
                         <FontAwesomeIcon icon={faLocationDot} className="absolute left-[0.5rem] w-[1.5rem] h-[1.5rem] top-[50%]  translate-y-[-50%] pointer-events-none" />
